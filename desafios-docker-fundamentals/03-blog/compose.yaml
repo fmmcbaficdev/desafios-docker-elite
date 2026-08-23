@@ -1,0 +1,82 @@
+# Desafio 3: Blog da Rota42 (WordPress + MySQL)
+# Objetivo: subir WordPress e MySQL com persistencia total de dados,
+# garantindo que nada se perca ao recriar os containers.
+#
+# Credenciais vem do arquivo .env (copie .env.example -> .env).
+
+name: rota42-blog
+
+services:
+
+  # ── Banco de dados MySQL ─────────────────────────────────────────
+  db:
+    image: mysql:8.0
+    container_name: rota42-db
+    restart: unless-stopped
+
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+
+    # Persistencia: os dados do banco vivem no volume nomeado 'db_data',
+    # que sobrevive a 'docker compose down' e a recriacao do container.
+    volumes:
+      - db_data:/var/lib/mysql
+
+    networks:
+      - blog_net
+
+    # Healthcheck garante que o WordPress so sobe quando o MySQL
+    # esta realmente aceitando conexoes (nao so com o processo vivo).
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p$$MYSQL_ROOT_PASSWORD"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+
+  # ── WordPress ────────────────────────────────────────────────────
+  wordpress:
+    image: wordpress:latest
+    container_name: rota42-wordpress
+    restart: unless-stopped
+
+    # Espera o MySQL ficar saudavel antes de subir.
+    depends_on:
+      db:
+        condition: service_healthy
+
+    ports:
+      - "${WORDPRESS_HTTP_PORT:-8080}:80"
+
+    environment:
+      WORDPRESS_DB_HOST: db:3306
+      WORDPRESS_DB_USER: ${MYSQL_USER}
+      WORDPRESS_DB_PASSWORD: ${MYSQL_PASSWORD}
+      WORDPRESS_DB_NAME: ${MYSQL_DATABASE}
+
+    # Persistencia: uploads, temas, plugins e wp-content ficam no
+    # volume 'wp_data' -> nada se perde ao destruir o container.
+    volumes:
+      - wp_data:/var/www/html
+
+    networks:
+      - blog_net
+
+# ── Volumes nomeados ───────────────────────────────────────────────
+# Ficam gerenciados pelo Docker; nao sao removidos por 'docker compose down'.
+# Para apagar de verdade (perder os dados): 'docker compose down -v'.
+volumes:
+  db_data:
+    name: rota42_db_data
+  wp_data:
+    name: rota42_wp_data
+
+# ── Rede isolada ───────────────────────────────────────────────────
+# Rede propria pro stack; WordPress acha o MySQL pelo nome 'db'.
+networks:
+  blog_net:
+    name: rota42_blog_net
+    driver: bridge
