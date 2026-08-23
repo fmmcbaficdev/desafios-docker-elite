@@ -1,0 +1,16 @@
+# ── Documentos (mantidos apenas localmente) ───────────────────────
+*.md
+!README.md
+
+# ── SO / Editores ─────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+desktop.ini
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# ── Docker / logs locais ──────────────────────────────────────────
+*.log

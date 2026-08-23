@@ -1,0 +1,12 @@
+# Normaliza final de linha por tipo de arquivo.
+# Shell scripts SEMPRE em LF — CRLF quebra a execução em Linux/containers.
+*.sh    text eol=lf
+*.bash  text eol=lf
+
+# Dockerfiles e YAML também em LF por convenção
+Dockerfile       text eol=lf
+*.yml            text eol=lf
+*.yaml           text eol=lf
+
+# Detecta automaticamente text vs binário para o resto
+*    text=auto
