@@ -1,0 +1,86 @@
+# Desafio 4: Ambiente de desenvolvimento kube-news
+# Objetivo: subir PostgreSQL + pgAdmin com persistencia de dados,
+# expondo a porta do banco para a app NodeJS rodando em localhost.
+#
+# Repo da app NodeJS: https://github.com/KubeDev/kube-news
+# Credenciais vem do arquivo .env (copie .env.example -> .env).
+
+name: kube-news-env
+
+services:
+
+  # ── Banco de dados PostgreSQL ────────────────────────────────────
+  # Exposto em localhost:${POSTGRES_PORT} para a app NodeJS local.
+  db:
+    image: postgres:16
+    container_name: kubenews-db
+    restart: unless-stopped
+
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+
+    ports:
+      # Publica o Postgres no host para a app NodeJS local se conectar.
+      - "${POSTGRES_PORT:-5432}:5432"
+
+    # Persistencia: dados do banco vivem no volume nomeado 'postgres_data'
+    # e sobrevivem a 'docker compose down' e recriacao do container.
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+    networks:
+      - kubenews_net
+
+    # Healthcheck garante que o pgAdmin so tente subir quando o
+    # Postgres esta realmente aceitando conexoes.
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 20s
+
+  # ── pgAdmin (explorador do banco) ────────────────────────────────
+  db_explorer:
+    image: dpage/pgadmin4:latest
+    container_name: kubenews-pgadmin
+    restart: unless-stopped
+
+    depends_on:
+      db:
+        condition: service_healthy
+
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
+      # Desabilita o wizard inicial de master password (dev only).
+      PGADMIN_CONFIG_MASTER_PASSWORD_REQUIRED: "False"
+
+    ports:
+      - "${PGADMIN_PORT:-5050}:80"
+
+    # Persistencia: conexoes salvas, configuracoes e queries do usuario
+    # ficam no volume 'pgadmin_data'.
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+
+    networks:
+      - kubenews_net
+
+# ── Volumes nomeados ───────────────────────────────────────────────
+# Gerenciados pelo Docker; nao sao removidos por 'docker compose down'.
+# Para apagar de verdade (perder dados): 'docker compose down -v'.
+volumes:
+  postgres_data:
+    name: kubenews_postgres_data
+  pgadmin_data:
+    name: kubenews_pgadmin_data
+
+# ── Rede isolada ───────────────────────────────────────────────────
+# pgAdmin acha o Postgres pelo hostname 'db' dentro dessa rede.
+networks:
+  kubenews_net:
+    name: kubenews_net
+    driver: bridge
