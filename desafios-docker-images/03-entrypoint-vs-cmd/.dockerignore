@@ -1,0 +1,7 @@
+# Whitelist: por default ignora TUDO no build context.
+# Isso evita que a pasta ./videos/ (que pode ter arquivos GBs)
+# seja enviada ao daemon durante o build.
+*
+
+!convert.sh
+!Dockerfile

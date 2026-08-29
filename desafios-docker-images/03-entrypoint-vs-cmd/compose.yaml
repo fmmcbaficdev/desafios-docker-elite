@@ -1,0 +1,59 @@
+# Desafio 03 (trilha 2) - ENTRYPOINT vs CMD
+#
+# Este compose:
+#   1) Constroi a imagem (docker compose build)
+#   2) Facilita rodar com diferentes parametros para testar ENTRYPOINT + CMD
+#
+# ── Como testar cada cenario ─────────────────────────────────────────
+#
+#   1. SEM args (usa CMD default do Dockerfile = --help):
+#      docker compose run --rm converter
+#
+#   2. COM args (sobrescreve CMD, mantem ENTRYPOINT):
+#      docker compose run --rm converter video.mp4 avi
+#      docker compose run --rm converter clipe.mov mp4
+#      docker compose run --rm converter musica.wav mp3
+#
+#   3. Cenarios pre-configurados (via profile "examples"):
+#      docker compose --profile examples up mp4-para-avi
+#      docker compose --profile examples up mp4-para-mov
+#
+# Arquivos de entrada devem estar em ./videos/ (bind mount para /work).
+# Os arquivos convertidos aparecem em ./videos/output.<formato>.
+
+name: rota42-video-converter
+
+# ── Ancora YAML: config compartilhada entre todos os services ─────────
+x-converter-base: &converter-base
+  image: rota42/video-converter:1.0
+  volumes:
+    - ./videos:/work
+
+services:
+
+  # Service principal - usado com `docker compose run --rm converter ARGS`.
+  converter:
+    <<: *converter-base
+    build:
+      context: .
+      dockerfile: Dockerfile
+    pull_policy: build
+
+  # ── Exemplos pre-configurados (opt-in via profile) ─────────────────
+  # Rodam com `docker compose --profile examples up SERVICE`.
+  # Demonstram como o `command:` do compose sobrescreve o CMD do Dockerfile.
+
+  mp4-para-avi:
+    <<: *converter-base
+    profiles: ["examples"]
+    command: ["video.mp4", "avi"]
+
+  mp4-para-mov:
+    <<: *converter-base
+    profiles: ["examples"]
+    command: ["video.mp4", "mov"]
+
+  mp4-para-mkv:
+    <<: *converter-base
+    profiles: ["examples"]
+    command: ["video.mp4", "mkv"]

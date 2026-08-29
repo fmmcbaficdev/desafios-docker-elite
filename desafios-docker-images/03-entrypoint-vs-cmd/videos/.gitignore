@@ -1,0 +1,5 @@
+# Videos de entrada e saida sao locais - nao vao para o repositorio.
+# A pasta existe para servir de bind mount alvo (/work dentro do container).
+*
+!.gitkeep
+!.gitignore

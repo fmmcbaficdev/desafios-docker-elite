@@ -15,7 +15,8 @@ desafios-docker-fundamentals/    Trilha 1 — fundamentos (containers, volumes, 
 
 desafios-docker-images/          Trilha 2 — imagens (Dockerfile, build, otimização, registry)
 ├── 01-primeiro-dockerfile/      Página estática em NGINX + Docker Compose build
-└── 02-boas-praticas-dockerfile/ Refatoração de Dockerfile FastAPI (multi-stage, cache, non-root)
+├── 02-boas-praticas-dockerfile/ Refatoração de Dockerfile FastAPI (multi-stage, cache, non-root)
+└── 03-entrypoint-vs-cmd/        Container FFmpeg com args dinâmicos (ENTRYPOINT + CMD)
 ```
 
 ## Trilha 1 — Fundamentos
@@ -37,6 +38,7 @@ Foco em construção, otimização e distribuição de imagens: `Dockerfile`, mu
 |---|---|---|---|
 | 01 | [Primeiro Dockerfile](desafios-docker-images/01-primeiro-dockerfile/) | Dockerfile, `nginx:alpine-slim`, Docker Compose (build) | `Dockerfile`, `compose.yaml` |
 | 02 | [Boas Práticas de Dockerfile](desafios-docker-images/02-boas-praticas-dockerfile/) | Multi-stage, BuildKit cache, non-root, HEALTHCHECK, FastAPI | `Dockerfile`, `compose.yaml` |
+| 03 | [ENTRYPOINT vs CMD](desafios-docker-images/03-entrypoint-vs-cmd/) | ENTRYPOINT exec form, CMD default, ffmpeg, Alpine, compose profiles | `Dockerfile`, `compose.yaml`, `convert.sh` |
 
 ## Pré-requisitos
 
