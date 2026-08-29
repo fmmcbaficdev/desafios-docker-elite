@@ -1,0 +1,19 @@
+# Desafio 01 (trilha 2) - primeiro Dockerfile
+#
+# Este compose serve a dois propositos:
+#   1) docker compose build   -> constroi a imagem a partir do Dockerfile local
+#   2) docker compose up -d   -> sobe o container publicando na porta 8080
+
+name: rota42-institucional
+
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: rota42-institucional:1.0
+    container_name: rota42-institucional
+    restart: unless-stopped
+    pull_policy: build
+    ports:
+      - "8080:80"

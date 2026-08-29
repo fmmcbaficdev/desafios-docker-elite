@@ -1,0 +1,8 @@
+# Estrategia whitelist: por default ignora TUDO, so o site entra no build context.
+# Reduz o tamanho enviado ao daemon e evita vazamento de arquivos locais na imagem.
+*
+
+# Whitelist:
+!site/
+!site/**
+!Dockerfile
