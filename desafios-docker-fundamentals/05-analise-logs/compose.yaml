@@ -1,0 +1,85 @@
+# Desafio 5: Analise de logs - fake-shop (Flask + PostgreSQL)
+#
+# Este compose e a versao CORRIGIDA do que veio no enunciado.
+# O original tinha 3 bugs que so apareciam ao ler os logs do container
+# 'ecommerce' com 'docker compose logs -f ecommerce':
+#
+#   1) DB_USER=fakeshop        -> deveria ser 'ecommerce' (POSTGRES_USER)
+#   2) DB_NAME=ecommerce       -> deveria ser 'fakeshop'  (POSTGRES_DB)
+#   3) DB_PASSWORD=Pg1234      -> deveria ser 'pg1234'    (case-sensitive)
+#
+# Ver o README.md deste diretorio para o roteiro completo de analise
+# e correcao a partir dos logs.
+
+name: fake-shop
+
+services:
+
+  # ── PostgreSQL ───────────────────────────────────────────────────
+  postgre:
+    image: postgres:13.16
+    container_name: fakeshop-db
+    restart: unless-stopped
+
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+
+    volumes:
+      - postgre_data:/var/lib/postgresql/data
+
+    networks:
+      - fakeshop_net
+
+    # Healthcheck garante que o Flask so tenta subir quando o Postgres
+    # esta realmente aceitando conexoes.
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 20s
+
+  # ── App fake-shop (Flask) ────────────────────────────────────────
+  ecommerce:
+    image: fabricioveronez/fake-shop
+    container_name: fakeshop-app
+    restart: unless-stopped
+
+    depends_on:
+      postgre:
+        condition: service_healthy
+
+    environment:
+      DB_HOST: postgre
+      # ── CORRECAO DOS BUGS ORIGINAIS ──────────────────────────────
+      # DB_USER estava 'fakeshop', trocamos por POSTGRES_USER (ecommerce).
+      DB_USER: ${POSTGRES_USER}
+      # DB_PASSWORD estava 'Pg1234' com P maiusculo. Usando POSTGRES_PASSWORD.
+      DB_PASSWORD: ${POSTGRES_PASSWORD}
+      # DB_NAME estava 'ecommerce', trocamos por POSTGRES_DB (fakeshop).
+      DB_NAME: ${POSTGRES_DB}
+      DB_PORT: "5432"
+      FLASK_APP: index.py
+
+    ports:
+      - "${APP_PORT:-5000}:5000"
+
+    networks:
+      - fakeshop_net
+
+# ── Volumes nomeados ───────────────────────────────────────────────
+volumes:
+  postgre_data:
+    name: fakeshop_postgre_data
+
+# ── Rede isolada ───────────────────────────────────────────────────
+# App acha o Postgres pelo hostname 'postgre' dentro desta rede.
+networks:
+  fakeshop_net:
+    name: fakeshop_net
+    driver: bridge
