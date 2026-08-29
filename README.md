@@ -9,7 +9,9 @@ desafios-docker-fundamentals/
 ├── 01-primeiro-container/    Ciclo básico: pull, run, ps, stop, rm
 ├── 02-container-logs/        Persistência de logs de Nginx via volume
 ├── 03-blog/                  WordPress + MySQL com persistência (Docker Compose)
-└── 04-ambiente/              PostgreSQL + pgAdmin para app NodeJS local
+├── 04-ambiente/              PostgreSQL + pgAdmin para app NodeJS local
+├── 05-analise-logs/          Diagnóstico e correção de compose quebrado (via logs)
+└── 06-multiplos-ambientes/   Dev + Homolog isolados via múltiplos arquivos .env
 ```
 
 ## Índice de desafios
@@ -20,6 +22,8 @@ desafios-docker-fundamentals/
 | 02 | [Container Logs](desafios-docker-fundamentals/02-container-logs/) | Docker Volumes, Nginx | `nginx_volume_container.sh` |
 | 03 | [Blog Rota42](desafios-docker-fundamentals/03-blog/) | Docker Compose, WordPress, MySQL | `compose.yaml` |
 | 04 | [Ambiente kube-news](desafios-docker-fundamentals/04-ambiente/) | Docker Compose, PostgreSQL, pgAdmin | `compose.yaml` |
+| 05 | [Análise de Logs](desafios-docker-fundamentals/05-analise-logs/) | Docker Compose, Flask, PostgreSQL, troubleshooting | `compose.yaml` |
+| 06 | [Múltiplos Ambientes](desafios-docker-fundamentals/06-multiplos-ambientes/) | Docker Compose, `--env-file`, isolamento | `compose.yaml`, `.dev.env`, `.homolog.env` |
 
 ## Pré-requisitos
 

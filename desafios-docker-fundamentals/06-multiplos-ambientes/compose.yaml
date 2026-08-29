@@ -1,0 +1,84 @@
+# Desafio 6: Multiplos ambientes (dev / homologacao)
+#
+# Este compose e agnostico de ambiente - TODA configuracao especifica
+# vem do env file passado com --env-file. Assim o mesmo compose sobe
+# ambientes isolados sem edicao manual.
+#
+# Como usar:
+#   docker compose --env-file .dev.env      up -d
+#   docker compose --env-file .homolog.env  up -d
+#
+# O PROJECT_NAME de cada env file isola nomes de containers, rede
+# e volume - os dois ambientes podem coexistir no mesmo host.
+
+name: ${PROJECT_NAME}
+
+services:
+
+  # ── PostgreSQL ───────────────────────────────────────────────────
+  postgre:
+    image: postgres:13.16
+    container_name: ${PROJECT_NAME}-db
+    restart: unless-stopped
+
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+
+    ports:
+      - "${POSTGRES_PORT}:5432"
+
+    volumes:
+      - postgre_data:/var/lib/postgresql/data
+
+    networks:
+      - fakeshop_net
+
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 20s
+
+  # ── App fake-shop (Flask) ────────────────────────────────────────
+  ecommerce:
+    image: fabricioveronez/fake-shop
+    container_name: ${PROJECT_NAME}-app
+    restart: unless-stopped
+
+    depends_on:
+      postgre:
+        condition: service_healthy
+
+    environment:
+      # Credenciais compartilhadas com o servico postgre via .env
+      # (mesma variavel = impossivel divergir entre banco e app).
+      DB_HOST: postgre
+      DB_USER: ${POSTGRES_USER}
+      DB_PASSWORD: ${POSTGRES_PASSWORD}
+      DB_NAME: ${POSTGRES_DB}
+      DB_PORT: "5432"
+      FLASK_APP: index.py
+      # Marcador do ambiente - util para logs, metricas, healthchecks.
+      APP_ENV: ${APP_ENV}
+
+    ports:
+      - "${APP_PORT}:5000"
+
+    networks:
+      - fakeshop_net
+
+# ── Volume nomeado ─────────────────────────────────────────────────
+# Prefixado por PROJECT_NAME -> volumes de dev e homolog nao se
+# misturam. Cada ambiente tem seu proprio banco isolado.
+volumes:
+  postgre_data:
+    name: ${PROJECT_NAME}_postgre_data
+
+# ── Rede isolada ───────────────────────────────────────────────────
+networks:
+  fakeshop_net:
+    name: ${PROJECT_NAME}_net
+    driver: bridge
