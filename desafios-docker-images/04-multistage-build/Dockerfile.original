@@ -1,0 +1,12 @@
+# Dockerfile NAIVE da equipe (referencia) - NAO e a entrega.
+# Compila e roda no mesmo stage: toolchain Go + ffmpeg ficam na imagem final.
+
+FROM golang:1.23
+
+WORKDIR /app
+COPY . .
+RUN go build -o converter .
+RUN apt-get update && apt-get install -y ffmpeg && rm -rf /var/lib/apt/lists/*
+
+ENTRYPOINT ["./converter"]
+CMD ["--help"]

@@ -1,0 +1,31 @@
+# Desafio 04 (trilha 2) - Multistage Build
+#
+#   docker compose build
+#   docker compose run --rm converter
+#   docker compose run --rm converter video.mp4 avi
+
+name: rota42-video-converter-go
+
+x-converter-base: &converter-base
+  image: rota42/video-converter-go:1.0
+  volumes:
+    - ./videos:/work
+
+services:
+
+  converter:
+    <<: *converter-base
+    build:
+      context: .
+      dockerfile: Dockerfile
+    pull_policy: build
+
+  mp4-para-avi:
+    <<: *converter-base
+    profiles: ["examples"]
+    command: ["video.mp4", "avi"]
+
+  mp4-para-mkv:
+    <<: *converter-base
+    profiles: ["examples"]
+    command: ["video.mp4", "mkv"]
