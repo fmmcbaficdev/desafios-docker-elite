@@ -1,0 +1,32 @@
+# Desafio 02 (trilha 2) - Dockerfile otimizado
+#
+# Objetivos deste compose:
+#   1) docker compose up -d      -> sobe a API na porta 8000 do host
+#   2) docker compose build      -> constroi a imagem otimizada
+#   3) docker compose push       -> publica a imagem no registry configurado
+#
+# Antes do push:
+#   - configure IMAGE_REPO no .env (ex: docker.io/SEUUSUARIO/fastapi-boilerplate)
+#   - faca `docker login` no registry alvo
+#
+# Ver .env.example para as variaveis suportadas.
+
+name: rota42-fastapi
+
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: ${IMAGE_REPO:-rota42/fastapi-boilerplate}:${IMAGE_TAG:-1.0}
+    container_name: rota42-fastapi
+    restart: unless-stopped
+    pull_policy: build
+    ports:
+      - "${APP_PORT:-8000}:8000"
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request,sys; sys.exit(0 if urllib.request.urlopen('http://localhost:8000/').status==200 else 1)"]
+      interval: 30s
+      timeout: 3s
+      retries: 3
+      start_period: 5s

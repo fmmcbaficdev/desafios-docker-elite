@@ -14,7 +14,8 @@ desafios-docker-fundamentals/    Trilha 1 — fundamentos (containers, volumes, 
 └── 06-multiplos-ambientes/      Dev + Homolog isolados via múltiplos arquivos .env
 
 desafios-docker-images/          Trilha 2 — imagens (Dockerfile, build, otimização, registry)
-└── 01-primeiro-dockerfile/      Página estática em NGINX + Docker Compose build
+├── 01-primeiro-dockerfile/      Página estática em NGINX + Docker Compose build
+└── 02-boas-praticas-dockerfile/ Refatoração de Dockerfile FastAPI (multi-stage, cache, non-root)
 ```
 
 ## Trilha 1 — Fundamentos
@@ -35,6 +36,7 @@ Foco em construção, otimização e distribuição de imagens: `Dockerfile`, mu
 | # | Desafio | Tecnologias | Entrega |
 |---|---|---|---|
 | 01 | [Primeiro Dockerfile](desafios-docker-images/01-primeiro-dockerfile/) | Dockerfile, `nginx:alpine-slim`, Docker Compose (build) | `Dockerfile`, `compose.yaml` |
+| 02 | [Boas Práticas de Dockerfile](desafios-docker-images/02-boas-praticas-dockerfile/) | Multi-stage, BuildKit cache, non-root, HEALTHCHECK, FastAPI | `Dockerfile`, `compose.yaml` |
 
 ## Pré-requisitos
 

@@ -1,0 +1,17 @@
+# Whitelist: por default ignora TUDO, so entra o essencial pro build.
+*
+
+!app.py
+!requirements.txt
+!Dockerfile
+
+# Blacklist adicional para nunca deixar lixo entrar,
+# mesmo que apareca localmente:
+__pycache__/
+**/__pycache__/
+*.pyc
+.venv/
+venv/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/

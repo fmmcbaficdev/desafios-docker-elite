@@ -7,6 +7,7 @@ Segunda trilha da coletânea. Foco em **construção, otimização e distribuiç
 | # | Desafio | Tecnologias | Entrega |
 |---|---|---|---|
 | 01 | [Primeiro Dockerfile](01-primeiro-dockerfile/) | Dockerfile, `nginx:alpine-slim`, Docker Compose (build) | `Dockerfile`, `compose.yaml` |
+| 02 | [Boas Práticas de Dockerfile](02-boas-praticas-dockerfile/) | Multi-stage, BuildKit cache mount, non-root, HEALTHCHECK, Python/FastAPI | `Dockerfile`, `compose.yaml` |
 
 ## Convenções da trilha
 
