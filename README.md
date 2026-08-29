@@ -18,6 +18,16 @@ desafios-docker-images/          Trilha 2 — imagens (Dockerfile, build, otimiz
 ├── 02-boas-praticas-dockerfile/ Refatoração de Dockerfile FastAPI (multi-stage, cache, non-root)
 ├── 03-entrypoint-vs-cmd/        Container FFmpeg com args dinâmicos (ENTRYPOINT + CMD)
 └── 04-multistage-build/         Conversor Go + ffmpeg em multi-stage (sem SDK na imagem final)
+
+desafios-docker-security/        Trilha 3 — segurança (scan, hardening, SBOM, distroless, Cosign)
+├── 01-identificando-vulnerabilidades/
+├── 02-imagem-docker-segura/
+├── 03-sbom-docker-scout/
+├── 04-distroless-e-cosign/
+├── 05-identificando-vulnerabilidades-fake-shop/
+├── 06-imagem-docker-segura-fake-shop/
+├── 07-sbom-trivy-fake-shop/
+└── 08-distroless-e-cosign-fake-shop/
 ```
 
 ## Trilha 1 — Fundamentos
@@ -41,6 +51,14 @@ Foco em construção, otimização e distribuição de imagens: `Dockerfile`, mu
 | 02 | [Boas Práticas de Dockerfile](desafios-docker-images/02-boas-praticas-dockerfile/) | Multi-stage, BuildKit cache, non-root, HEALTHCHECK, FastAPI | `Dockerfile`, `compose.yaml` |
 | 03 | [ENTRYPOINT vs CMD](desafios-docker-images/03-entrypoint-vs-cmd/) | ENTRYPOINT exec form, CMD default, ffmpeg, Alpine, compose profiles | `Dockerfile`, `compose.yaml`, `convert.sh` |
 | 04 | [Multistage Build](desafios-docker-images/04-multistage-build/) | Go, multi-stage, Alpine + ffmpeg, binário estático | `Dockerfile`, `compose.yaml` |
+
+## Trilha 3 — Segurança
+
+Revisão da cadeia de suprimentos de imagens Docker da Rota42, aplicada em duas apps: **Kube News** (Node.js) e **Fake Shop** (Python). Ciclo: identificar CVEs → endurecer o Dockerfile → gerar SBOM → assinar imagem distroless.
+
+| # | Desafio | Tecnologias | Entrega |
+|---|---|---|---|
+| 01 | [Identificando vulnerabilidades](desafios-docker-security/01-identificando-vulnerabilidades/) | Docker Scout, SARIF, npm (Kube News) | `vulnerabilities-report.sarif` |
 
 ## Pré-requisitos
 
