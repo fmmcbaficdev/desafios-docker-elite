@@ -59,6 +59,7 @@ Revisão da cadeia de suprimentos de imagens Docker da Rota42, aplicada em duas 
 | # | Desafio | Tecnologias | Entrega |
 |---|---|---|---|
 | 01 | [Identificando vulnerabilidades](desafios-docker-security/01-identificando-vulnerabilidades/) | Docker Scout, SARIF, npm (Kube News) | `vulnerabilities-report.sarif` |
+| 02 | [Imagem Docker segura](desafios-docker-security/02-imagem-docker-segura/) | Scout, Hadolint, Alpine, non-root, npm ci | `Dockerfile`, SARIF before/after, `hadolint-report.txt` |
 
 ## Pré-requisitos
 

@@ -1,0 +1,12 @@
+*
+!package.json
+!package-lock.json
+!server.js
+!middleware.js
+!system-life.js
+!models/
+!models/**
+!views/
+!views/**
+!static/
+!static/**
