@@ -1,0 +1,33 @@
+{
+  "name": "Fake Shop",
+  "dockerComposeFile": ["../compose.yml", "docker-compose.override.yml"],
+  "service": "app",
+  "workspaceFolder": "/workspaces/fake-shop",
+  "shutdownAction": "stopCompose",
+  "forwardPorts": [5000, 5432],
+  "portsAttributes": {
+    "5000": {
+      "label": "Fake Shop",
+      "onAutoForward": "notify"
+    },
+    "5432": {
+      "label": "PostgreSQL",
+      "onAutoForward": "silent"
+    }
+  },
+  "waitFor": "postCreateCommand",
+  "postCreateCommand": "mkdir -p /tmp/metrics && cd src && pip install -r requirements.txt && pip install 'psycopg[binary]==3.2.3'",
+  "customizations": {
+    "vscode": {
+      "settings": {
+        "editor.formatOnSave": true,
+        "python.defaultInterpreterPath": "/usr/local/bin/python"
+      },
+      "extensions": [
+        "ms-python.python",
+        "humao.rest-client",
+        "ms-azuretools.vscode-docker"
+      ]
+    }
+  }
+}

@@ -1,0 +1,51 @@
+# Docker Compose de produção.
+#   docker compose -f compose.yml up -d --build
+#   http://localhost:5002
+#
+# 5000/5001 do host já são fakeshop-dev / fakeshop-homolog. APP_PORT sobrescreve.
+
+name: fake-shop-prod
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      FLASK_ENV: production
+      APP_ENV: production
+      FLASK_DEBUG: "0"
+      FLASK_APP: index.py
+      DB_HOST: db
+      DB_PORT: "5432"
+      DB_USER: ecommerce
+      DB_PASSWORD: Pg1234
+      DB_NAME: ecommerce
+      PROMETHEUS_MULTIPROC_DIR: /tmp/metrics
+    ports:
+      - "${APP_PORT:-5002}:5000"
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: unless-stopped
+
+  db:
+    image: postgres:16
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ecommerce
+      POSTGRES_PASSWORD: Pg1234
+      POSTGRES_DB: ecommerce
+    volumes:
+      - fake-shop-postgres-prod:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ecommerce -d ecommerce"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+
+volumes:
+  fake-shop-postgres-prod:
+    name: fake-shop-prod-postgres
+    driver: local

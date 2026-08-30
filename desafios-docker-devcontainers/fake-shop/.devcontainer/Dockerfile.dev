@@ -1,0 +1,16 @@
+# Desenvolvimento: Python 3.11, debug (Flask + debugpy) e cliente do Postgres.
+FROM mcr.microsoft.com/devcontainers/python:3.11
+
+RUN apt-get update \
+ && apt-get install -y --no-install-recommends postgresql-client \
+ && pip install --no-cache-dir debugpy \
+ && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /workspaces/fake-shop
+
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1 \
+    FLASK_APP=index.py \
+    FLASK_ENV=development \
+    APP_ENV=development \
+    FLASK_DEBUG=1
