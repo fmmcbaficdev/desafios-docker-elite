@@ -63,6 +63,7 @@ Revisão da cadeia de suprimentos de imagens Docker da Rota42, aplicada em duas 
 | 03 | [SBOM Docker Scout](desafios-docker-security/03-sbom-docker-scout/) | Docker Scout SBOM JSON (Kube News) | `sbom-report.json` |
 | 04 | [Distroless e Cosign](desafios-docker-security/04-distroless-e-cosign/) | Chainguard Distroless, Cosign, Docker Hub | `Dockerfile`, `cosign-signature.txt` |
 | 05 | [Identificando vulnerabilidades](desafios-docker-security/05-identificando-vulnerabilidades-fake-shop/) | Trivy, SARIF, pip (Fake Shop) | `vulnerabilities-report.sarif` |
+| 06 | [Imagem Docker segura](desafios-docker-security/06-imagem-docker-segura-fake-shop/) | Trivy, Hadolint, Alpine, non-root, pip (Fake Shop) | `Dockerfile`, SARIF before/after, `hadolint-report.txt` |
 
 ## Pré-requisitos
 

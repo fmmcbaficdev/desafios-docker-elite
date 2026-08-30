@@ -1,0 +1,41 @@
+# Hadolint — Dockerfile original (antes da correção)
+# Comando:
+#   docker run --rm -v $PWD:/work hadolint/hadolint \
+#     hadolint --format json /work/Dockerfile.original
+#
+# Hadolint 2.15.1 — saída oficial:
+[{"code":"DL3042","column":1,"file":"/work/Dockerfile.original","level":"warning","line":4,"message":"Avoid use of cache directory with pip. Use `pip install --no-cache-dir <package>`"}]
+
+# Texto:
+# Dockerfile.original:4 DL3042 warning: Avoid use of cache directory with pip.
+
+# Revisão complementar (práticas inseguras que o Hadolint não pontuou
+# neste Dockerfile, mas que a auditoria da Rota42 precisa corrigir):
+#
+# 1. Base python:3.11 (Debian full)
+#    - Imagem ~1 GB só de OS + toolchain
+#    - Centenas de pacotes OS → superfície enorme de CVE
+#
+# 2. Processo roda como root (UID 0)
+#    - Sem instrução USER; default da imagem é root
+#    - Compromisso da app = root no container
+#
+# 3. RUN pip install (sem --no-cache-dir, sem venv)
+#    - Deixa cache do pip na camada (DL3042)
+#    - Instala no site-packages do sistema como root
+#
+# 4. COPY . .
+#    - Sem .dockerignore no projeto original
+#    - Pode vazar .git, .venv, testes, secrets
+#
+# 5. CMD gunicorn app:app
+#    - O modulo Flask real e index:app (index.py)
+#    - A imagem original nao sobe a aplicacao
+#
+# 6. Sem PYTHONDONTWRITEBYTECODE / PYTHONUNBUFFERED / FLASK_APP
+#    - Logs bufferizados; bytecode .pyc nas camadas
+#
+# Dockerfile corrigido: ver ./Dockerfile
+# Hadolint no arquivo corrigido: sem findings (exit 0).
+# DL3018 (apk sem pin) ignorado de proposito: a tag python:3.11-alpine
+# flutuante quebra pins de apk a cada rebuild da base.
