@@ -32,3 +32,4 @@ cosign.key
 # Apps de terceiros usadas nos desafios (com .git proprio) que ficam
 # na raiz para conveniencia mas nao pertencem a este repositorio.
 /kube-news/
+/fake-shop/

@@ -35,7 +35,7 @@ Esta trilha aplica o mesmo ciclo em **duas aplicações**:
 | 07 | [SBOM com Trivy](07-sbom-trivy-fake-shop/) | Fake Shop | `sbom-report.json` |
 | 08 | [Distroless e Cosign](08-distroless-e-cosign-fake-shop/) | Fake Shop | `Dockerfile`, `cosign-signature.txt` |
 
-_Desafios 01–04 concluídos (Kube News). Os demais aguardam o enunciado._
+_Desafios 01–05 concluídos (Kube News 01–04; Fake Shop 05). Os demais aguardam o enunciado._
 
 ## Convenções da trilha
 
