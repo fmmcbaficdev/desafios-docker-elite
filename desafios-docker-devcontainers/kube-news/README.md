@@ -28,7 +28,7 @@ No clone/fork do **kube-news** (precisa da pasta `src/`):
 docker compose -f compose.yml up -d --build
 ```
 
-http://localhost:8080 — se a porta estiver ocupada: `APP_PORT=8088 docker compose -f compose.yml up -d --build`
+http://localhost:8088 (a 8080 do host já é do `rota42-institucional`). Outra porta: `APP_PORT=8099 docker compose -f compose.yml up -d --build`
 
 ```bash
 docker compose -f compose.yml down
