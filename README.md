@@ -65,6 +65,7 @@ Revisão da cadeia de suprimentos de imagens Docker da Rota42, aplicada em duas 
 | 05 | [Identificando vulnerabilidades](desafios-docker-security/05-identificando-vulnerabilidades-fake-shop/) | Trivy, SARIF, pip (Fake Shop) | `vulnerabilities-report.sarif` |
 | 06 | [Imagem Docker segura](desafios-docker-security/06-imagem-docker-segura-fake-shop/) | Trivy, Hadolint, Alpine, non-root, pip (Fake Shop) | `Dockerfile`, SARIF before/after, `hadolint-report.txt` |
 | 07 | [SBOM com Trivy](desafios-docker-security/07-sbom-trivy-fake-shop/) | Trivy CycloneDX JSON (Fake Shop) | `sbom-report.json` |
+| 08 | [Distroless e Cosign](desafios-docker-security/08-distroless-e-cosign-fake-shop/) | Chainguard Distroless, Cosign, Docker Hub (Fake Shop) | `Dockerfile`, `cosign-signature.txt` |
 
 ## Pré-requisitos
 
