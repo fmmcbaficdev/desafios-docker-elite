@@ -23,6 +23,11 @@ desktop.ini
 !.env.example
 !.env.*.example
 
+# NUNCA commitar chaves privadas do Cosign
+cosign.key
+**/cosign.key
+*.pem
+
 # ── Repositorios externos clonados para desenvolvimento ───────────
 # Apps de terceiros usadas nos desafios (com .git proprio) que ficam
 # na raiz para conveniencia mas nao pertencem a este repositorio.
