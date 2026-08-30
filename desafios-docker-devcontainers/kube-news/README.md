@@ -1,37 +1,43 @@
-# Desafios 01–02 (trilha 4) — DevContainer do Kube News
+# Desafios 01–03 (trilha 4) — DevContainer e produção do Kube News
 
-Entrega oficial: fork do [KubeDev/kube-news](https://github.com/KubeDev/kube-news) com o DevContainer na raiz do projeto.
-
-**Fork:** https://github.com/fmmcbaficdev/kube-news
+Entrega oficial: [fork](https://github.com/fmmcbaficdev/kube-news) (os arquivos abaixo são o espelho).
 
 ```
 kube-news/
-└── .devcontainer/
-    ├── devcontainer.json    # extensões + postCreateCommand (npm install)
-    ├── Dockerfile
-    └── docker-compose.yml   # Postgres com volume persistente
+├── .devcontainer/
+│   ├── devcontainer.json
+│   ├── Dockerfile.dev                 # nodemon (hot reload)
+│   └── docker-compose.override.yml    # ajustes de desenvolvimento
+├── compose.yml                        # produção
+├── Dockerfile                         # produção (Alpine, non-root)
+└── README.md
 ```
 
-## O que o desafio 02 adiciona
-
-| Item | Onde | Detalhe |
+| Variável | Produção | DevContainer |
 |---|---|---|
-| REST Client | `humao.rest-client` | Testar APIs (`popula-dados.http`) |
-| ESLint | `dbaeumer.vscode-eslint` | Padronização JavaScript (`src/`) |
-| Docker | `ms-azuretools.vscode-docker` | Integração Docker no VS Code |
-| Volume persistente | `kube-news-dev-postgres` | Dados do Postgres sobrevivem a Rebuild/down |
-| `postCreateCommand` | `cd src && npm install` | Dependências na criação do ambiente |
+| `NODE_ENV` / `APP_ENV` | `production` | `development` |
+| Imagem | `Dockerfile` Alpine | `Dockerfile.dev` + nodemon |
+| Compose | só `compose.yml` | `compose.yml` + override |
+| Volume Postgres | `kube-news-prod-postgres` | `kube-news-dev-postgres` |
 
-## Como abrir no VS Code
+## Produção
 
-1. Clone o fork e abra **a pasta `kube-news`** (não o monorepo elite).
-2. Instale a extensão [Dev Containers](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers).
-3. `Dev Containers: Rebuild and Reopen in Container`.
-4. Espere o `postCreateCommand` (`npm install` em `src/`).
-5. Confira as extensões: REST Client, ESLint, Docker.
-6. No terminal do container: `cd src && npm start`.
-7. App em http://localhost:8080 (encaminhada pelo VS Code; a 8080 do host já é usada pelo `rota42-institucional`).
+No clone/fork do **kube-news** (precisa da pasta `src/`):
 
-Credenciais (defaults do README do Kube News): usuário/banco `kubedevnews`, senha `Pg#123`.
+```bash
+docker compose -f compose.yml up -d --build
+```
 
-Para apagar o banco de verdade: `docker volume rm kube-news-dev-postgres`.
+http://localhost:8080 — se a porta estiver ocupada: `APP_PORT=8088 docker compose -f compose.yml up -d --build`
+
+```bash
+docker compose -f compose.yml down
+```
+
+## DevContainer
+
+Abra a pasta `kube-news` no VS Code → **Rebuild and Reopen in Container**. Depois:
+
+```bash
+cd src && nodemon server.js
+```

@@ -1,0 +1,29 @@
+# Ajustes para desenvolvimento dentro do DevContainer.
+# Caminhos relativos ao primeiro compose (compose.yml na raiz do kube-news).
+# Não entra no `docker compose -f compose.yml` de produção.
+
+name: kube-news-dev
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: .devcontainer/Dockerfile.dev
+    image: kube-news-dev
+    command: sleep infinity
+    working_dir: /workspaces/kube-news
+    environment:
+      NODE_ENV: development
+      APP_ENV: development
+    ports: !reset []
+    volumes:
+      - .:/workspaces/kube-news:cached
+
+  db:
+    volumes: !override
+      - kube-news-postgres-dev:/var/lib/postgresql/data
+
+volumes:
+  kube-news-postgres-dev:
+    name: kube-news-dev-postgres
+    driver: local

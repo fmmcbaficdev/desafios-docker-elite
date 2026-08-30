@@ -46,9 +46,10 @@ O código-fonte das apps continua nos clones da raiz (`/kube-news`, `/fake-shop`
 |---|---|---|---|
 | 01 | [DevContainer Kube News](kube-news/) | Kube News | `.devcontainer/` no [fork](https://github.com/fmmcbaficdev/kube-news) |
 | 02 | [Extensões e volumes](kube-news/) | Kube News | extensões VS Code, volume Postgres, `npm install` automático |
+| 03 | [Prod vs Dev](kube-news/) | Kube News | `Dockerfile` + `compose.yml` + `Dockerfile.dev` + override |
 | — | Fake Shop | Fake Shop | pendente |
 
-_Desafios 01–02 implementados. Fake Shop aguarda o enunciado._
+_Desafios 01–03 implementados. Fake Shop aguarda o enunciado._
 
 ## Convenções da trilha
 

@@ -1,6 +1,6 @@
 {
   "name": "Kube News",
-  "dockerComposeFile": "docker-compose.yml",
+  "dockerComposeFile": ["../compose.yml", "docker-compose.override.yml"],
   "service": "app",
   "workspaceFolder": "/workspaces/kube-news",
   "shutdownAction": "stopCompose",
