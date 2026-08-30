@@ -78,6 +78,7 @@ Ambiente de desenvolvimento padronizado com DevContainers no VS Code, nos mesmos
 | # | Desafio | Tecnologias | Entrega |
 |---|---|---|---|
 | 01 | [DevContainer Kube News](desafios-docker-devcontainers/kube-news/) | DevContainer, Compose, Node.js, PostgreSQL | `.devcontainer/` no [fork](https://github.com/fmmcbaficdev/kube-news) |
+| 02 | [Extensões e volumes](desafios-docker-devcontainers/kube-news/) | REST Client, ESLint, Docker, volume Postgres, `npm install` | mesmo `.devcontainer/` do fork |
 
 ## Pré-requisitos
 

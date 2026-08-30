@@ -32,7 +32,8 @@ services:
       POSTGRES_PASSWORD: Pg#123
       POSTGRES_DB: kubedevnews
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      # Volume nomeado: sobrevive a Rebuild / Reopen / compose down (some só com -v).
+      - kube-news-postgres:/var/lib/postgresql/data
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U kubedevnews -d kubedevnews"]
       interval: 5s
@@ -41,4 +42,6 @@ services:
       start_period: 10s
 
 volumes:
-  postgres_data:
+  kube-news-postgres:
+    name: kube-news-dev-postgres
+    driver: local
