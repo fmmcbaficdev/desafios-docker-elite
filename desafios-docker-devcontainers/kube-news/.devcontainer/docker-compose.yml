@@ -1,0 +1,44 @@
+# Orquestra a app Node.js (DevContainer) e o PostgreSQL.
+# Credenciais = defaults do Kube News (README do projeto).
+
+name: kube-news-dev
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ..:/workspaces/kube-news:cached
+    command: sleep infinity
+    environment:
+      DB_HOST: db
+      DB_PORT: "5432"
+      DB_DATABASE: kubedevnews
+      DB_USERNAME: kubedevnews
+      DB_PASSWORD: Pg#123
+      DB_SSL_REQUIRE: "false"
+    depends_on:
+      db:
+        condition: service_healthy
+    # Sem `ports:` no host — a 8080 costuma estar ocupada (ex.: rota42-institucional).
+    # O VS Code encaminha 8080 via forwardPorts no devcontainer.json.
+
+  db:
+    image: postgres:16
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: kubedevnews
+      POSTGRES_PASSWORD: Pg#123
+      POSTGRES_DB: kubedevnews
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U kubedevnews -d kubedevnews"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+
+volumes:
+  postgres_data:

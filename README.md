@@ -28,6 +28,10 @@ desafios-docker-security/        Trilha 3 — segurança (scan, hardening, SBOM,
 ├── 06-imagem-docker-segura-fake-shop/
 ├── 07-sbom-trivy-fake-shop/
 └── 08-distroless-e-cosign-fake-shop/
+
+desafios-docker-devcontainers/    Trilha 4 — DevContainers (ambiente reprodutível no VS Code)
+├── kube-news/                   Produção + .devcontainer (Node.js)
+└── fake-shop/                   Produção + .devcontainer (Python)
 ```
 
 ## Trilha 1 — Fundamentos
@@ -66,6 +70,14 @@ Revisão da cadeia de suprimentos de imagens Docker da Rota42, aplicada em duas 
 | 06 | [Imagem Docker segura](desafios-docker-security/06-imagem-docker-segura-fake-shop/) | Trivy, Hadolint, Alpine, non-root, pip (Fake Shop) | `Dockerfile`, SARIF before/after, `hadolint-report.txt` |
 | 07 | [SBOM com Trivy](desafios-docker-security/07-sbom-trivy-fake-shop/) | Trivy CycloneDX JSON (Fake Shop) | `sbom-report.json` |
 | 08 | [Distroless e Cosign](desafios-docker-security/08-distroless-e-cosign-fake-shop/) | Chainguard Distroless, Cosign, Docker Hub (Fake Shop) | `Dockerfile`, `cosign-signature.txt` |
+
+## Trilha 4 — DevContainers
+
+Ambiente de desenvolvimento padronizado com DevContainers no VS Code, nos mesmos pilotos da trilha 3: **Kube News** e **Fake Shop**. Produção (`Dockerfile` + `compose.yml`) fica na raiz de cada piloto; o DevContainer fica em `.devcontainer/`.
+
+| # | Desafio | Tecnologias | Entrega |
+|---|---|---|---|
+| 01 | [DevContainer Kube News](desafios-docker-devcontainers/kube-news/) | DevContainer, Compose, Node.js, PostgreSQL | `.devcontainer/` no [fork](https://github.com/fmmcbaficdev/kube-news) |
 
 ## Pré-requisitos
 
